@@ -5,7 +5,7 @@ import {
   RecaptchaVerifier, 
   signInWithPhoneNumber 
 } from 'firebase/auth';
-import { auth } from './config/firebase'; // Import your Firebase auth configuration
+import { auth } from './config/firebase'; 
 import './Login.css';
 import phone from './assets/phone.png';
 import logo from './assets/logo.png';
@@ -17,59 +17,55 @@ const Login = () => {
   const [verificationId, setVerificationId] = useState('');
   const [error, setError] = useState('');
 
-  // Validate phone number format
+ 
   const validatePhoneNumber = (phoneNumber) => {
-    // More lenient regex to handle different phone number formats
+    
     const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     return phoneRegex.test(phoneNumber);
   };
   
 
-  // Setup Recaptcha Verifier
+  
   const setupRecaptchaVerifier = () => {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         'size': 'invisible',
         'callback': (response) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
+         
           handleSendOtp();
         },
         'expired-callback': () => {
-          // Response expired. Ask user to solve reCAPTCHA again.
           setError('reCAPTCHA expired. Please try again.');
         }
       });
     }
   };
 
-  // Send OTP 
   const handleSendOtp = async () => {
-    // Reset previous errors
     setError('');
 
-    // Validate phone number
     if (!mobileNumber || !validatePhoneNumber(mobileNumber)) {
       setError('Please enter a valid mobile number');
       return;
     }
 
     try {
-      // Setup Recaptcha Verifier
       setupRecaptchaVerifier();
 
-      // Ensure phone number is in E.164 format
+     
       const phoneNumber = mobileNumber.startsWith('+') 
         ? mobileNumber 
         : `+91${mobileNumber.replace(/\D/g,'')}`;
 
-      // Send OTP
+     
+
       const confirmationResult = await signInWithPhoneNumber(
         auth, 
         phoneNumber, 
         window.recaptchaVerifier
       );
 
-      // Save verification ID
+     
       setVerificationId(confirmationResult.verificationId);
       setOtpSent(true);
       setError(''); // Clear any previous errors
@@ -80,9 +76,9 @@ const Login = () => {
     }
   };
 
-  // Verify OTP
+  
   const handleVerifyOtp = async () => {
-    // Reset previous errors
+   
     setError('');
 
     if (!otp) {
@@ -91,7 +87,7 @@ const Login = () => {
     }
 
     try {
-      // Test-friendly OTP verification
+     
       if (process.env.NODE_ENV === 'test') {
         console.log('Test OTP verified successfully');
         alert('Login successful (Test Mode)!');
@@ -103,12 +99,11 @@ const Login = () => {
       
       console.log('User authenticated successfully');
       alert('Login successful!');
-      // Redirect or handle post-login actions
-      // Example: history.push('/dashboard');
+     
     } catch (error) {
       console.error('Error verifying OTP:', error);
       
-      // Specific error handling
+      
       switch (error.code) {
         case 'auth/invalid-verification-code':
           setError('Invalid OTP. Please check and try again.');
@@ -122,7 +117,7 @@ const Login = () => {
     }
   };
 
-  // Reset OTP flow
+  
   const handleReset = () => {
     setOtpSent(false);
     setOtp('');
@@ -132,7 +127,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      {/* Recaptcha container (hidden) */}
+      
       <div id="recaptcha-container"></div>
 
       <div className="login-form">
@@ -140,7 +135,6 @@ const Login = () => {
         <h2>Login</h2>
         <p>Login to access your TravelWise account</p>
 
-        {/* Error Message */}
         {error && (
           <div 
             style={{ 
@@ -153,7 +147,6 @@ const Login = () => {
           </div>
         )}
 
-        {/* Conditional rendering for login and OTP verification */}
         {!otpSent ? (
           <>
             <input
@@ -183,16 +176,7 @@ const Login = () => {
             >
               Verify OTP
             </button>
-            <button 
-              style={{ 
-                background: '#FF6347', 
-                marginTop: '10px',
-                color: 'white'
-              }} 
-              onClick={handleReset}
-            >
-              Reset
-            </button>
+           
           </>
         )}
 
@@ -214,6 +198,12 @@ const Login = () => {
 };
 
 export default Login;
+
+
+
+
+
+
 
 // import React, { useState, useEffect } from 'react';
 // import { 

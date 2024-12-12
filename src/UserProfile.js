@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import './UserProfile.css';
+import logo from './assets/logo.png';
 const UserProfile = () => {
   const [user, setUser] = useState({ firstName: "", lastName: ""});
   const auth = getAuth();
@@ -28,6 +29,9 @@ const UserProfile = () => {
 
   return (
     <div style={styles.container}>
+      <div className="logo">
+      <img src={logo} alt="Logo" className="logo" />
+      </div>
       <h2 style={styles.nameText}>{`${user.firstName} ${user.lastName}`}</h2>
       <button onClick={handleLogout} style={styles.button}>
         Log Out
@@ -55,12 +59,14 @@ const styles = {
   button: {
     padding: "10px 20px",
     fontSize: "16px",
-    backgroundColor: "#4A90E2",
+    backgroundColor: " #6c63ff",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
+    width:"30%"
   },
+  
 };
 
 export default UserProfile;
