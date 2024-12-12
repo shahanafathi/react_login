@@ -245,11 +245,17 @@ input[type="email"]:focus {
   border-color: #4a90e2;
 }
 
+input[type="checkbox"]{
+  width: fit-content;
+}
 /* Checkbox and Terms */
 .terms {
   display: flex;
   margin-left: 0px;
   font-size: 14px;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
 
 }
 
